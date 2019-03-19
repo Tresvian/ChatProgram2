@@ -5,7 +5,7 @@ Main starts IRC
 
 IRC spawns socket threads and start listening.
 
-Acceptor thread directs connections to each thread.
+Acceptor thread directs connections to each socket thread.
 
 (WIP: add authenticator to IRC)
 
