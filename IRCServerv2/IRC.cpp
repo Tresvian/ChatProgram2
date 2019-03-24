@@ -5,15 +5,14 @@ IRC::IRC(int socketCount, int port)
 	acceptor(io_context),
 	endpoint(boost::asio::ip::tcp::v4(), port)
 {
-	endIndicator = new std::atomic<bool>;
-	*endIndicator = false;
+	std::atomic<bool>* endIndicator;
+	*endIndicator = new bool(false);
 	for (int i; i < socketCount; ++i)
 	{
 		// Spawns threads, and lets them start updating back.
-		clientListThreads.push_back(
-			std::thread(
-				Client(
-					io_context, i, this, endIndicator)));
+		std::thread thread(newClient, io_context, i, this, endIndicator);
+
+		clientListThreads.push_back(std::move(thread));
 	}
 	std::cout << "Spawning threads, please wait..." << std::endl;
 
@@ -40,10 +39,19 @@ IRC::~IRC()
 }
 
 
+void IRC::newClient(boost::asio::io_context& ioref, int id,
+	IRC* parent, std::atomic<bool>* endIndicator)
+{
+	// param IRC* parent is supposed to be "this"
+	Client(ioref, id, parent, endIndicator);
+}
+
+
+
 void IRC::updateClientList(int id, Client* clientPtr)
 {
 	clientListmutex.lock();
-	clientList[id] = clientPtr;
+	clientList.push_back(clientPtr);
 	clientListmutex.unlock();
 }
 
@@ -52,39 +60,11 @@ void IRC::netSendMessage(std::string message)
 {
 	for (auto& eachClient : clientList)
 	{
-		if ((eachClient.second)->getStatus() == clientStatus::connected)
+		if (eachClient->getStatus() == clientStatus::connected)
 		{
 			boost::system::error_code ignoredError;
-			(eachClient.second)->netSendMessage(message);
+			eachClient->netSendMessage(message);
 		}
-	}
-}
-
-
-void IRC::run()
-{
-	std::string command;
-	while (std::getline(std::cin, command))
-	{
-		std::vector<std::string> commandVector;
-		commandVector = split(command);
-
-		if (commandVector[0] == std::string("/help"))
-		{
-			std::cout << "Available commands:\n"
-				<< "/help\n"
-				<< "/quit\n"
-				<< std::endl;
-		}
-		if (commandVector[0] == std::string("/quit"))
-		{
-			*endIndicator = true;
-		}
-	}
-	if (*endIndicator == false)
-	{
-		std::cout << "Did you exit weirdly? (/help)" << std::endl;
-		run();
 	}
 }
 
@@ -113,4 +93,32 @@ static std::vector<std::string> split(std::string theString)
 		}
 	}
 	return returnResult;
+}
+
+
+void IRC::run()
+{
+	std::string command;
+	while (std::getline(std::cin, command))
+	{
+		std::vector<std::string> commandVector;
+		commandVector = split(command);
+
+		if (commandVector[0] == std::string("/help"))
+		{
+			std::cout << "Available commands:\n"
+				<< "/help\n"
+				<< "/quit\n"
+				<< std::endl;
+		}
+		if (commandVector[0] == std::string("/quit"))
+		{
+			*endIndicator = true;
+		}
+	}
+	if (*endIndicator == false)
+	{
+		std::cout << "Did you exit weirdly? (/help)" << std::endl;
+		run();
+	}
 }

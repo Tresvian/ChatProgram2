@@ -1,17 +1,21 @@
 #pragma once
 #include "Client.h"
+#include "IRC.h"
+
+class Client;
+class IRC;
 
 class messageHandle
 {
 private:
-	std::map<int, Client*> clientPtrList;
+	std::vector<Client*> clientPtrList;
 	std::atomic<bool>* endIndicator;
-	IRC* const parentIRC;
+	IRC* parentIRC;
 
 public:
-	messageHandle(std::map<int, Client*> ptrList,
-		std::atomic<bool>* endindicator,
-		IRC* const parentIRC);
+	messageHandle(std::vector<Client*> ptrList,
+		std::atomic<bool>* endindi,
+		IRC* parentIRC);
 	~messageHandle();
 
 	void run();

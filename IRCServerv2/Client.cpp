@@ -1,7 +1,7 @@
 #include "Client.h"
 
 Client::Client(boost::asio::io_context& ioref, int id,
-	IRC* const parent, std::atomic<bool>* endIndicator)
+	IRC* parent, std::atomic<bool>* endIndicator)
 	: socket(ioref),
 	m_clientStatus(clientStatus::disconnected),
 	parentIRC(parent),
@@ -37,7 +37,8 @@ std::string Client::getMessage()
 {
 	messageLock.lock();
 
-	std::string temp = messageRequests.front();
+	std::string temp;
+	temp = messageRequests.front();
 	messageRequests.pop();
 
 	messageLock.unlock();
@@ -94,6 +95,7 @@ void Client::run()
 	catch (std::exception& e)
 	{
 		setStatus(clientStatus::disconnected);
+		std::cout << e.what() << std::endl;
 	}
 	
 

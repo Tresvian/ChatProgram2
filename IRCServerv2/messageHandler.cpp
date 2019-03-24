@@ -1,9 +1,9 @@
 #include "messageHandler.h"
 
 messageHandle::messageHandle(
-	std::map<int, Client*> ptrList, std::atomic<bool>* endindicator,
-	IRC* const parentIRC)
-	: endIndicator(endindicator), clientPtrList(ptrList),
+	std::vector<Client*> ptrList, std::atomic<bool>* endindi,
+	IRC* parentIRC)
+	: endIndicator(endindi), clientPtrList(ptrList),
 	parentIRC(parentIRC)
 {
 	run();
@@ -17,12 +17,11 @@ messageHandle::~messageHandle()
 
 void messageHandle::run()
 {
-	// This looks weird because its using a std::map
 	for (auto& eachClient : clientPtrList)
 	{
-		if (checkForMessage(eachClient.second))
+		if (checkForMessage(eachClient))
 		{
-			std::string temp = (eachClient.second)->getMessage();
+			std::string temp = eachClient->getMessage();
 
 		}
 	}
@@ -44,5 +43,5 @@ bool messageHandle::checkForMessage(Client* client)
 
 std::string messageHandle::getClientMessage(Client* client)
 {
-	return client->getMessage;
+	return client->getMessage();
 }

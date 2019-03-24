@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.28307.438
+VisualStudioVersion = 15.0.28307.329
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "IRCServerv2", "IRCServerv2\IRCServerv2.vcxproj", "{B3174D18-7E6D-46CA-8DD7-2A51DEFC2E6E}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "IRCServerv2", "IRCServerv2\IRCServerv2.vcxproj", "{AECA514B-FD0C-40CD-8132-A2D766BEA304}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,19 +13,19 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{B3174D18-7E6D-46CA-8DD7-2A51DEFC2E6E}.Debug|x64.ActiveCfg = Debug|x64
-		{B3174D18-7E6D-46CA-8DD7-2A51DEFC2E6E}.Debug|x64.Build.0 = Debug|x64
-		{B3174D18-7E6D-46CA-8DD7-2A51DEFC2E6E}.Debug|x86.ActiveCfg = Debug|Win32
-		{B3174D18-7E6D-46CA-8DD7-2A51DEFC2E6E}.Debug|x86.Build.0 = Debug|Win32
-		{B3174D18-7E6D-46CA-8DD7-2A51DEFC2E6E}.Release|x64.ActiveCfg = Release|x64
-		{B3174D18-7E6D-46CA-8DD7-2A51DEFC2E6E}.Release|x64.Build.0 = Release|x64
-		{B3174D18-7E6D-46CA-8DD7-2A51DEFC2E6E}.Release|x86.ActiveCfg = Release|Win32
-		{B3174D18-7E6D-46CA-8DD7-2A51DEFC2E6E}.Release|x86.Build.0 = Release|Win32
+		{AECA514B-FD0C-40CD-8132-A2D766BEA304}.Debug|x64.ActiveCfg = Debug|x64
+		{AECA514B-FD0C-40CD-8132-A2D766BEA304}.Debug|x64.Build.0 = Debug|x64
+		{AECA514B-FD0C-40CD-8132-A2D766BEA304}.Debug|x86.ActiveCfg = Debug|Win32
+		{AECA514B-FD0C-40CD-8132-A2D766BEA304}.Debug|x86.Build.0 = Debug|Win32
+		{AECA514B-FD0C-40CD-8132-A2D766BEA304}.Release|x64.ActiveCfg = Release|x64
+		{AECA514B-FD0C-40CD-8132-A2D766BEA304}.Release|x64.Build.0 = Release|x64
+		{AECA514B-FD0C-40CD-8132-A2D766BEA304}.Release|x86.ActiveCfg = Release|Win32
+		{AECA514B-FD0C-40CD-8132-A2D766BEA304}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {F082BA9D-8004-42F1-97F7-429F595C91B8}
+		SolutionGuid = {240085BE-E124-4141-B0BA-123CB0F5D9E5}
 	EndGlobalSection
 EndGlobal

@@ -1,9 +1,10 @@
 #include "IRC.h"
-
+#include "Client.h"
+#include "messageHandler.h"
+#include "acceptorHandler.h"
 
 int main(int argc, char* argv[])
 {
-	/*test*/
 	std::vector<std::string> argVector;
 	std::cout << "Parasing args" << std::endl;
 	for (int i = 1; i < argc; ++i)
@@ -13,7 +14,7 @@ int main(int argc, char* argv[])
 	}
 
 	// Changing this into something that has multiple instances
-	// is fairly easy. It's all classes. Change command prompt
+	// is fairly easy. It's all classes. Change server prompt
 	// to be here instead of inside the ircInstance.
 	try
 	{
