@@ -1,12 +1,12 @@
 #include "Client.h"
 
 Client::Client(boost::asio::io_context& ioref, int id,
-	IRC* parent, std::atomic<bool>* endIndicator)
+	IRC* parent, std::atomic_bool* endIndicator)
 	: socket(ioref),
-	m_clientStatus(clientStatus::disconnected),
-	parentIRC(parent),
-	id(id),
-	endIndicator(endIndicator)
+	  m_clientStatus(clientStatus::disconnected),
+	  parentIRC(parent),
+	  id(id),
+	  endIndicator(endIndicator)
 {
 	parentIRC->updateClientList(id, this);
 	run();
@@ -27,6 +27,9 @@ const clientStatus Client::getStatus() const
 
 void Client::requestMessage(std::string message)
 {
+
+	//place a message in queue
+
 	messageLock.lock();
 	messageRequests.push(message);
 	messageLock.unlock();
@@ -35,14 +38,23 @@ void Client::requestMessage(std::string message)
 
 std::string Client::getMessage()
 {
+	// gets the front message
 	messageLock.lock();
 
-	std::string temp;
-	temp = messageRequests.front();
+	std::string returnme;
+	returnme = messageRequests.front();
 	messageRequests.pop();
 
 	messageLock.unlock();
-	return temp;
+
+	return returnme;
+}
+
+
+boost::asio::ip::tcp::socket* Client::getSocket()
+{
+	boost::asio::ip::tcp::socket* ptr = &socket;
+	return ptr;
 }
 
 
@@ -54,6 +66,7 @@ const int& Client::getid() const
 
 bool Client::messageReady()
 {
+	// check if message is available
 	messageLock.lock();
 	if (messageRequests.empty())
 	{
@@ -86,11 +99,12 @@ void Client::run()
 
 	try
 	{
-		std::string buffer;
-		socket.receive(boost::asio::buffer(buffer));
-		messageLock.lock();
-		messageRequests.push(buffer);
-		messageLock.unlock();
+		while (getStatus() == clientStatus::connected)
+		{
+			std::string buffer;
+			socket.receive(boost::asio::buffer(buffer));
+			requestMessage(buffer);
+		}
 	}
 	catch (std::exception& e)
 	{

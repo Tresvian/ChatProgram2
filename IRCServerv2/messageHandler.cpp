@@ -1,33 +1,36 @@
 #include "messageHandler.h"
 
 messageHandle::messageHandle(
-	std::vector<Client*> ptrList, std::atomic<bool>* endindi,
+	std::vector<Client*> ptrList, std::atomic_bool* endindi,
 	IRC* parentIRC)
 	: endIndicator(endindi), clientPtrList(ptrList),
-	parentIRC(parentIRC)
+	  parentIRC(parentIRC)
 {
 	run();
 }
 
 
-messageHandle::~messageHandle()
-{
-}
-
-
 void messageHandle::run()
 {
-	for (auto& eachClient : clientPtrList)
+	try
 	{
-		if (checkForMessage(eachClient))
+		for (auto& eachClient : clientPtrList)
 		{
-			std::string temp = eachClient->getMessage();
+			if (checkForMessage(eachClient))
+			{
+				std::string temp = eachClient->getMessage();
 
+			}
 		}
 	}
-
+	catch (std::exception& e)
+	{
+		// looks like we are gonna exit 
+		// need exit handling
+		std::cout << e.what() << std::endl;
+	}
 	using namespace std::chrono_literals;
-	std::this_thread::sleep_for(100ms);
+	std::this_thread::sleep_for(150ms);
 	if (*endIndicator == false)
 	{
 		run();

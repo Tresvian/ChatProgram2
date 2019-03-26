@@ -6,7 +6,7 @@
 int main(int argc, char* argv[])
 {
 	std::vector<std::string> argVector;
-	std::cout << "Parasing args" << std::endl;
+	std::cout << "Parsing args" << std::endl;
 	for (int i = 1; i < argc; ++i)
 	{
 		argVector.push_back(argv[i]);
@@ -18,13 +18,15 @@ int main(int argc, char* argv[])
 	// to be here instead of inside the ircInstance.
 	try
 	{
-		IRC ircInstance(10, 5005);
+		IRC ircInstance(10, 55055);
 	}
 	catch (std::exception& e)
 	{
 		std::cout << "Exiting with failure" << std::endl;
 		std::cout << e.what() << std::endl;
+		system("pause");
 	}
-
+	std::cout << "Exiting gracefully" << std::endl;
+	system("pause");
 	return 0;
 };

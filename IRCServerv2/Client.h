@@ -4,6 +4,11 @@
 #include "messageHandler.h"
 #include "acceptorHandler.h"
 
+enum clientStatus { disconnected, connected};
+class IRC;
+
+class Client
+{
 /*
 Session holder for a threaded socket.
 
@@ -25,11 +30,6 @@ run() is the loop to keep this thread alive.
 	upon error, disconnection, sets to disconnected and
 	begins the error again.
 */
-enum clientStatus { disconnected, connected};
-class IRC;
-
-class Client
-{
 private:
 	boost::asio::ip::tcp::socket socket;
 	clientStatus m_clientStatus;
@@ -39,16 +39,17 @@ private:
 	std::queue<std::string> messageRequests;
 	std::mutex messageLock;
 
-	std::atomic<bool>* endIndicator;
+	std::atomic_bool* endIndicator;
 
 public:
 	Client(boost::asio::io_context& ioref, int id,
-		IRC* parent, std::atomic<bool>* endIndicator);
+		IRC* parent, std::atomic_bool* endIndicator);
 
 	void setStatus(clientStatus x);
 	const clientStatus getStatus() const;
 	void requestMessage(std::string message);
 	std::string getMessage();
+	boost::asio::ip::tcp::socket* getSocket();
 	const int& getid() const;
 	bool messageReady();
 	void netSendMessage(std::string message);

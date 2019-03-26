@@ -1,4 +1,5 @@
 #pragma once
+
 #include <vector>
 #include <string>
 #include <iostream>
@@ -14,6 +15,55 @@
 #include "messageHandler.h"
 #include "acceptorHandler.h"
 
+
+class Client;
+class IRC;
+
+
+struct clientStruct
+{
+/*
+There is a weird thing with threading that requires
+this to be passed instead of passing args.
+
+This is a workaround.
+*/
+	boost::asio::io_context& io;
+	int id;
+	IRC* parent;
+	std::atomic_bool* endIndicator;
+	clientStruct(boost::asio::io_context& io,
+		int id,
+		IRC* parent,
+		std::atomic_bool* endInd)
+		: io(io), id(id), parent(parent), endIndicator(endInd)
+	{};
+};
+
+
+struct handleStruct
+{
+	/*
+	There is a weird thing with threading that requires
+	this to be passed instead of passing args.
+
+	This is a workaround.
+	*/
+	std::vector<Client*> clientList;
+	std::atomic_bool* endIndicator;
+	IRC* parent;
+	handleStruct(std::vector<Client*> clientList,
+		std::atomic_bool* endIndicator,
+		IRC* parent)
+		: clientList(clientList),
+		endIndicator(endIndicator),
+		parent(parent)
+	{};
+};
+
+
+class IRC
+{
 /*
 This is the main parent for all client instances.
 
@@ -42,34 +92,29 @@ updateClientList(int,Client* const) used for socket threads
 netSendMessage(string) broadcast out to all sockets.
 run() keepalive. currently cmd prompt too.
 */
-class Client;
-
-
-
-class IRC
-{
 private:
 	int socketCount;
 	boost::asio::io_context io_context;
 	boost::asio::ip::tcp::acceptor acceptor;
-	boost::asio::ip::tcp::endpoint endpoint;
 
 	std::thread messageHandler;
-	std::thread acceptorHandler; //todo, last one.
+	std::thread acceptorHandler;
 
 	std::vector<std::thread> clientListThreads;
 	std::vector<Client*> clientList;
 	std::mutex clientListmutex;
 
-	std::atomic<bool> *endIndicator;
+	std::atomic_bool* endIndicator;
 
 public:
 	IRC(int socketCount, int port);
 	~IRC();
 
-	static void newClient(boost::asio::io_context& ioref, int id,
-		IRC* parent, std::atomic<bool>* endIndicator);
+	static void newClient(clientStruct data);
+	static void newMessageHandler(handleStruct data);
+	static void newAcceptorHandler(handleStruct data);
 	void updateClientList(int id, Client*  clientPtr);
 	void netSendMessage(std::string message);
+	boost::asio::ip::tcp::acceptor* getAcceptor();
 	void run();
 };

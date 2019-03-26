@@ -9,14 +9,13 @@ class messageHandle
 {
 private:
 	std::vector<Client*> clientPtrList;
-	std::atomic<bool>* endIndicator;
+	std::atomic_bool* endIndicator;
 	IRC* parentIRC;
 
 public:
 	messageHandle(std::vector<Client*> ptrList,
-		std::atomic<bool>* endindi,
+		std::atomic_bool* endindi,
 		IRC* parentIRC);
-	~messageHandle();
 
 	void run();
 	bool checkForMessage(Client* client);
