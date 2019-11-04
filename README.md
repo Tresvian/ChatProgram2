@@ -1,11 +1,12 @@
-# IRCServerv2
+# ChatProgram2
 
-WIP: add authenticator to IRC
+Needs: add authenticator to IRC
 
-WIP: exit handling.
+Needs: exit handling.
 
-WIP: IRC has an interactable console for issueing messages/commands. 
+Needs: IRC has an interactable console for issueing messages/commands. 
 
-Could potentially create more IRC instances with their own chat channels. Would need little effort to do so, but movement of interactable console is necessary up to main.
+Could potentially create more IRC instances with their own chat channels. Would need very little effort to do so, but will need to move the management console.
 
-nvm. im bored
+In reflection:
+Definitely needs better version control, one feature at a time. Better than the last one in terms of readability and complexity, but still lacking in documentation (self-study after all).
